@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自定义md编辑器</title>
+  <link rel="stylesheet" href="./lib/lepture/css/editor.css">
+  <link rel="stylesheet" href="./lib/highlight/default.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html, body{
+      width: 100%;
+      height: 100%;
+      
+    }
+    body, code {
+      font-family: Microsoft Yahei;
+    }
+    .show, .editor {
+      box-sizing: border-box;
+      float: left;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .editor {
+      border: 2px solid #53a;
+    }
+    .show {
+      border: 2px solid #eee;
+      padding: 15px;
+      overflow-y: auto;
+    }
+  </style>
+  <script src="./lib/lepture/js/editor.js"></script>
+  <script src="./lib/lepture/js/marked.js"></script>
+  <script src="./lib/highlight/highlight.min.js"></script>
+  <script src="./lib/showdown/showdown.min.js"></script>
+</head>
+<body>
+  <div class="editor" id="j-editor-container">
+    <textarea class="j-editor" name="editor"></textarea>
+  </div>
+  <div id="j-show-container" class="show j-show"></div>
+
+  <script>
+    var editor = new Editor({
+      element: document.querySelector('.j-editor'),
+      "scroll": function() {
+        console.log('scroll');
+      }
+    });
+
+    var editorCtn = document.querySelector('#j-editor-container'),
+        showCtn = document.querySelector('#j-show-container'),
+        converter = new showdown.Converter();
+
+    // 实时展示代码
+    editorCtn.addEventListener('keyup', function() {
+      var originContent = editor.codemirror.getValue();
+      var compiledContent = converter.makeHtml(originContent);
+      showCtn.innerHTML = compiledContent;
+
+      // 高亮代码
+      var blocks = showCtn.querySelectorAll('code');
+      blocks.forEach(function(e) {
+        hljs.highlightBlock(e);
+      });
+    })
+
+  
+  </script>
+</body>
+</html>
